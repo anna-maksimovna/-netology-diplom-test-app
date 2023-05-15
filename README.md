@@ -31,7 +31,7 @@
 
 ### Создание облачной инфраструктуры
 
-В папке terraform/prepare выполнила команды:
+В папке terraform/[prepare](https://github.com/anna-maksimovna/netology-diplom/tree/main/terraform/prepare) выполнила команды:
 ```
 terraform init
 //создаем воркспейсы:
@@ -46,7 +46,7 @@ terraform plan
 ### Создание Kubernetes кластера
 
 Копирнула ключи из стейтов в terraform/prepare и прописала в main.tf
-В папке terraform/main выполнила команды:
+В папке terraform/[main](https://github.com/anna-maksimovna/netology-diplom/tree/main/terraform/main) выполнила команды:
 ```
 terraform init
 //создаем воркспейсы:
@@ -73,7 +73,7 @@ CONFIG_FILE=inventory/netologyCluster/hosts.yaml python3 contrib/inventory_build
 ansible-playbook -i inventory/netologyCluster/hosts.yaml  --become --become-user=root cluster.yml -b -v
 ```
 
-> В kubespray поменяла максимальную версию ansible в файлике ansible_version.yml
+> В [kubespray](https://github.com/anna-maksimovna/netology-diplom/tree/main/kubespray) поменяла максимальную версию ansible в файлике ansible_version.yml
 > Была еще ошибка, нашла таск, где она была и поставила там в no_log false (файл kubespray\roles\download\tasks\download_file.yml  строка 104)
 > Запустила опять плейбук, выдал что чек сумма неверная при скачивании файла calico версии 3.25.1, нашла версии калико и поменяла на 3.25.0 в файле kubespray\roles\download\defaults\main.yml  строка 106
 
@@ -84,8 +84,8 @@ kubectl get nodes
 ---
 ### Создание тестового приложения
 
-Тестовое приложение
-Dockerfile
+Тестовое [приложение](https://github.com/anna-maksimovna/netology-diplom/tree/main/test-app)
+[Dockerfile](https://github.com/anna-maksimovna/netology-diplom/blob/main/test-app/Dockerfile)
 
 ---
 ### Подготовка cистемы мониторинга и деплой приложения
@@ -114,7 +114,7 @@ chmod +x build.sh
 go install github.com/brancz/gojsontoyaml@latest
 go install github.com/google/go-jsonnet/cmd/jsonnet@latest
 ```
-Изменила файл example.jsonnet и далее запускаем развертывание:
+Изменила файл [example.jsonnet](https://github.com/anna-maksimovna/netology-diplom/blob/main/my-kube-prometheus/example.jsonnet) и далее запускаем развертывание:
 ```
 ./build.sh example.jsonnet
 kubectl apply --server-side -f manifests/setup
@@ -124,6 +124,6 @@ kubectl apply -f manifests/
 ---
 ### Установка и настройка CI/CD
 
-Для настройки ci/cd использовала GitLab. Файлы соответственно находятся в папке приложения.
+Для настройки ci/cd использовала GitLab. Файлы соответственно находятся в [папке](https://github.com/anna-maksimovna/netology-diplom/tree/main/test-app) приложения.
 
 

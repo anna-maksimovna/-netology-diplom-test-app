@@ -1,0 +1,46 @@
+
+stages:          
+  - build
+  - deploy
+
+
+build-latest-docker-image:
+  stage: build
+  image: docker:20-dind
+  variables:
+    # using "docker" as the host is only possible if you alias the service below
+    DOCKER_HOST: tcp://docker:2375 
+    # could be wrong here but although Docker defaults to overlay2, 
+    # Docker-in-Docker (DIND) does not according to the following GitLab doc: 
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - name: docker:20-dind
+  script:
+    - echo "build image"
+    - APP_TAG="latest"
+    - if [ -n "${CI_COMMIT_TAG}" ]; then APP_TAG="${CI_COMMIT_TAG}"; fi
+    - echo "$APP_TAG"
+    - cat $YANDEX_REGISTRY_KEY |docker login --username json_key --password-stdin cr.yandex
+    - docker build . -t cr.yandex/${YANDEX_REGISTRY_ID}/nginx:${APP_TAG}
+    - docker push cr.yandex/${YANDEX_REGISTRY_ID}/nginx:${APP_TAG}
+
+
+deploy-tag-docker-image:
+  rules:
+    - if: $CI_COMMIT_TAG
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  stage: deploy
+  services:
+    - name: docker:20-dind
+  script:
+    - echo "Deploy image for tag"
+    - kubectl config get-contexts
+    - kubectl config set-context --current --namespace=hello-world
+    - sed -i "s/__VERSION__/$APP_TAG/" k8s.yaml
+    - kubectl apply -f k8s.yaml
+    - kubectl get po
+
+  

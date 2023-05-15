@@ -46,6 +46,7 @@ terraform plan
 ### Создание Kubernetes кластера
 
 Копирнула ключи из стейтов в terraform/prepare и прописала в main.tf
+
 В папке terraform/[main](https://github.com/anna-maksimovna/netology-diplom/tree/main/terraform/main) выполнила команды:
 ```
 terraform init
@@ -58,13 +59,16 @@ terraform plan
 ```
 
 Сам кластер развернут с помощью [Kubespray](https://kubernetes.io/docs/setup/production-environment/tools/kubespray/) 
+
 в папке kubespray\inventory копируем папку sample и называем netologyCluster (kubespray\inventory\netologyCluster)
+
 В папке kubespray:
-Объявляем адреса вм созданных:
+
+Объявляем адреса созданных ВМ:
 ```
 declare -a IPS=(51.250.87.170 84.201.144.15 158.160.3.183 158.160.44.21)
 ```
-генерим host.yml:
+генерим host.yml (+ вручную его подправила еще):
 ```
 CONFIG_FILE=inventory/netologyCluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 ```
@@ -85,6 +89,7 @@ kubectl get nodes
 ### Создание тестового приложения
 
 Тестовое [приложение](https://github.com/anna-maksimovna/netology-diplom/tree/main/test-app)
+
 [Dockerfile](https://github.com/anna-maksimovna/netology-diplom/blob/main/test-app/Dockerfile)
 
 ---
